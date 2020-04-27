@@ -31,20 +31,34 @@ class Node {
         this.children.push(new Node(char));
     }
 
-    complete() {
-      return this._complete("", []);
+    complete(query) {
+      let currentNode = this;
+
+      query.split("").forEach(char => {
+        if (!currentNode.hasChild(char)) {
+            return null;
+        }
+        currentNode = currentNode.findChild(char);
+      });
+
+      return currentNode._complete(query, "", []);
     }
 
-    _complete(stringSoFar, suggestions) {
+    _complete(query, stringSoFar, suggestions) {
+      if (suggestions.length === 3) {
+        return suggestions;
+      }
+
       if (this.terminus) {
-        suggestions.push(stringSoFar);
+        suggestions.push(`${query}${stringSoFar}`);
         return suggestions;
       }
 
       this.children.forEach(child => {
-        stringSoFar += child.char;
-        child._complete(stringSoFar, suggestions);
+        child._complete(query, stringSoFar + child.char, suggestions);
       });
+
+      return suggestions;
     }
   }
   
@@ -54,7 +68,7 @@ class Node {
     
     words.forEach(word => {
       let currentNode = root;
-      word.split("").forEach(char => {
+      word.toLowerCase().split("").forEach(char => {
         if (!currentNode.hasChild(char)) {
             currentNode.addChild(char);
         }
@@ -66,8 +80,8 @@ class Node {
     return root;
   };
 
-  let myTrie = createTrie(['San Diego', 'Salt Lake City', 'San Francisco', 'Salt Lakesville']);
-  console.log(myTrie.complete());
+  let myTrie = createTrie(["New York", "Los Angeles", "Chicago", "Houston", "Philadelphia", "Phoenix", "San Antonio", "San Diego", "Dallas", "San Jose"]);
+  console.log(myTrie.complete("san"));
   
 //   // unit tests
 //   // do not modify the below code
