@@ -4,7 +4,6 @@
 // it's up to you what to return if the object isn't found (we're not testing that)
 
 function linearSearch(id, array) {
-    // code goes here
     for (let i = 0; i < array.length; i++) {
         if (array[i].id === id) return array[i];
     }
@@ -13,8 +12,6 @@ function linearSearch(id, array) {
 }
   
 function binarySearch(id, array) {
-    // code goes here
-    let found = false;
     let minIndex = 0;
     let maxIndex = array.length - 1;
     let middleIndex = Math.floor((maxIndex - minIndex) / 2); // 0,1,2,3
